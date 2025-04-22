@@ -1,12 +1,7 @@
 from django.urls import path
-from rest_framework.routers import DefaultRouter
 
 from .views import BookingsCreateDeleteListView, RoomsCreateDeleteListView
 
-
-router = DefaultRouter()
-router.register(r'bookings', BookingsCreateDeleteListView, basename='booking')
-router.register(r'rooms', RoomsCreateDeleteListView, basename='room')
 
 urlpatterns = [
     path('bookings/<int:room_id>/',
@@ -20,5 +15,3 @@ urlpatterns = [
     path('rooms/<int:pk>/',
          RoomsCreateDeleteListView.as_view(), name='room-delete'),
 ]
-
-urlpatterns += router.urls
