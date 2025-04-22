@@ -7,8 +7,9 @@ from .serializers import BookingsSerializer, RoomsSerializer
 from reservations.models import Bookings, Rooms
 
 
-class BookingsCreateDeleteListView(generics.CreateAPIView, generics.DeleteAPIView,
-                               generics.ListAPIView):
+class BookingsCreateDeleteListView(
+    generics.CreateAPIView, generics.DestroyAPIView, generics.ListAPIView
+):
     queryset = Bookings.objects.all()
     serializer_class = BookingsSerializer
     filter_backends = [filters.OrderingFilter]
@@ -58,7 +59,7 @@ class BookingsCreateDeleteListView(generics.CreateAPIView, generics.DeleteAPIVie
 
 
 class RoomsCreateDeleteListView(generics.CreateAPIView,
-                                generics.DeleteAPIView, generics.ListAPIView):
+                                generics.DestroyAPIView, generics.ListAPIView):
     queryset = Rooms.objects.all()
     serializer_class = RoomsSerializer
     filter_backends = [filters.OrderingFilter]
