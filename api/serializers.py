@@ -3,7 +3,7 @@ from rest_framework import serializers
 from reservations.models import Rooms, Bookings
 
 
-class RoomSerializers(serializers.ModelSerializer):
+class RoomsSerializer(serializers.ModelSerializer):
     """
     Сериализатор для модели Rooms.
     Отвечает за преобразование данных модели в JSON и обратно.
