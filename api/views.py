@@ -97,7 +97,7 @@ class BookingsListView(generics.ListAPIView):
 
     def get_queryset(self):
         room_id = self.kwargs.get('room_id')
-        return Bookings.objects.filter(room_id=room_id)
+        return Bookings.objects.filter(room_id=room_id).select_related('room')
 
 
 class BookingsDeleteView(generics.DestroyAPIView):
@@ -107,9 +107,15 @@ class BookingsDeleteView(generics.DestroyAPIView):
     """
     queryset = Bookings.objects.all()
     serializer_class = BookingsSerializer
+    lookup_field = 'pk'
 
     def destroy(self, request, *args, **kwargs):
-        booking = self.get_object()
+        try:
+            booking = self.get_object()
+        except Http404:
+            raise NotFound(
+                detail=f"Бронирование с ID {kwargs.get('pk')} не найдено."
+            )
 
         if booking.date_start < timezone.now().date():
             return Response(

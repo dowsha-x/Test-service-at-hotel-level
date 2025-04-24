@@ -48,7 +48,9 @@ class Bookings(models.Model):
     class Meta:
         verbose_name = 'Бронирование'
         verbose_name_plural = 'Бронирования'
-        # unique_together = ('room', 'date_start', 'date_end')
+        indexes = [
+            models.Index(fields=['room', 'date_start']),
+        ]
         ordering = ['date_start']
 
     def __str__(self):
