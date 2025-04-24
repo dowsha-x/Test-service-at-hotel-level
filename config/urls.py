@@ -7,6 +7,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api.urls')),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('swagger/', 
+    path('swagger/',
          SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
 ]

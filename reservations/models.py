@@ -23,9 +23,6 @@ class Rooms(models.Model):
         verbose_name = 'Комната'
         verbose_name_plural = 'Комнаты'
 
-    def formatted_created_at(self):
-        return self.created_at.strftime('%Y-%m-%d')
-
     def __str__(self):
         return f'Номер в отеле - {self.description[:100]}'
 
@@ -40,7 +37,7 @@ class Bookings(models.Model):
     guest_name - данные регистрируемого.
     created_at - дата создания брони.
     """
-    room_id = models.ForeignKey(
+    room = models.ForeignKey(
         'Rooms', on_delete=models.CASCADE,
         related_name='bookings', verbose_name='Комната')
     date_start = models.DateField('Дата заезда')
@@ -51,11 +48,8 @@ class Bookings(models.Model):
     class Meta:
         verbose_name = 'Бронирование'
         verbose_name_plural = 'Бронирования'
-        unique_together = ('room_id', 'date_start', 'date_end')
+        # unique_together = ('room', 'date_start', 'date_end')
         ordering = ['date_start']
-
-    def formatted_created_at(self):
-        return self.created_at.strftime('%Y-%m-%d')
 
     def __str__(self):
         return (f'Бронирование для {self.guest_name} в {self.room.description}'

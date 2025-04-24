@@ -1,17 +1,26 @@
 from django.urls import path
 
-from .views import BookingsCreateDeleteListView, RoomsCreateDeleteListView
-
+from .views import (
+    BookingCreateView,
+    BookingsListView,
+    BookingsDeleteView,
+    RoomListView,
+    RoomCreateView,
+    RoomDeleteView
+)
 
 urlpatterns = [
-    path('bookings/<int:room_id>/',
-         BookingsCreateDeleteListView.as_view(), name='booking-list'),
-    path('bookings/<int:room_id>/create/',
-         BookingsCreateDeleteListView.as_view(), name='booking-create'),
-    path('bookings/<int:room_id>/delete/<int:pk>/',
-         BookingsCreateDeleteListView.as_view(), name='booking-delete'),
     path('rooms/',
-         RoomsCreateDeleteListView.as_view(), name='room-list-create'),
-    path('rooms/<int:pk>/',
-         RoomsCreateDeleteListView.as_view(), name='room-delete'),
+         RoomListView.as_view(), name='room-list'),
+    path('rooms/create/',
+         RoomCreateView.as_view(), name='room-create'),
+    path('rooms/<int:room_id>/delete/',
+         RoomDeleteView.as_view(), name='room-delete'),
+
+    path('bookings/<int:room_id>/',
+         BookingsListView.as_view(), name='booking-list'),
+    path('bookings/',
+         BookingCreateView.as_view(), name='booking-create'),
+    path('bookings/<int:room_id>/delete/',
+         BookingsDeleteView.as_view(), name='booking-delete'),
 ]
