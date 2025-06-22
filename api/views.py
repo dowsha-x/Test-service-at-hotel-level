@@ -60,31 +60,24 @@ class RoomDeleteView(generics.DestroyAPIView):
 
 
 class BookingCreateView(generics.CreateAPIView):
-    """
-    Создание бронирования для комнаты
-    POST /bookings/<room_id>/create/
-    """
     serializer_class = BookingsSerializer
 
     def create(self, request, *args, **kwargs):
-        room_id = kwargs.get('room_id')
+        room_id = kwargs.get("room_id")
         try:
             room = Rooms.objects.get(id=room_id)
         except Rooms.DoesNotExist:
             return Response(
-                {"error": f"Комната с ID {room_id} не существует."},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": f"Комната с ID {room_id} не найдена."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-        request.data['room'] = room.id
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, context={"room": room})
         serializer.is_valid(raise_exception=True)
         booking = serializer.save()
 
-        return Response(
-            {"id": booking.id},
-            status=status.HTTP_201_CREATED
-        )
+        response_data = BookingsSerializer(booking).data
+        return Response(response_data, status=status.HTTP_201_CREATED)
 
 
 class BookingsListView(generics.ListAPIView):
@@ -103,7 +96,7 @@ class BookingsListView(generics.ListAPIView):
 class BookingsDeleteView(generics.DestroyAPIView):
     """
     Удаление бронирования
-    DELETE /bookings/<pk>/
+    DELETE /bookings/<pk>/delete/
     """
     queryset = Bookings.objects.all()
     serializer_class = BookingsSerializer
@@ -126,5 +119,5 @@ class BookingsDeleteView(generics.DestroyAPIView):
         booking.delete()
         return Response(
             {"message": f"Бронирование {kwargs['pk']} удалено"},
-            status=status.HTTP_200_OK
+            status=status.HTTP_204_NO_CONTENT
         )
